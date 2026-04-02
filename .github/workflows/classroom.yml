@@ -1,0 +1,73 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: required-files
+      id: required-files
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: required-files
+        setup-command: ''
+        command: test -f README.md test -f requirements.txt test -f check_env.py test
+          -f run_smoke_test.py test -f configs/smoke_test.yaml test -d src
+        timeout: 5
+        max-score: 2
+    - name: install-dependencies
+      id: install-dependencies
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: install-dependencies
+        setup-command: ''
+        command: python -m pip install --upgrade pip pip install -r requirements.txt
+          python -c "import torch, sklearn, matplotlib, yaml"
+        timeout: 10
+        max-score: 2
+    - name: environment-check
+      id: environment-check
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: environment-check
+        setup-command: ''
+        command: python check_env.py test -f outputs/logs/env_check.txt
+        timeout: 10
+        max-score: 2
+    - name: smoke-test-pipeline
+      id: smoke-test-pipeline
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: smoke-test-pipeline
+        setup-command: ''
+        command: python run_smoke_test.py
+        timeout: 10
+        max-score: 2
+    - name: required-outputs
+      id: required-outputs
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: required-outputs
+        setup-command: ''
+        command: test -f outputs/logs/smoke_test_log.txt test -f outputs/figures/loss_curve.png
+          test -f outputs/checkpoints/smoke_model.pt
+        timeout: 10
+        max-score: 2
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        REQUIRED-FILES_RESULTS: "${{steps.required-files.outputs.result}}"
+        INSTALL-DEPENDENCIES_RESULTS: "${{steps.install-dependencies.outputs.result}}"
+        ENVIRONMENT-CHECK_RESULTS: "${{steps.environment-check.outputs.result}}"
+        SMOKE-TEST-PIPELINE_RESULTS: "${{steps.smoke-test-pipeline.outputs.result}}"
+        REQUIRED-OUTPUTS_RESULTS: "${{steps.required-outputs.outputs.result}}"
+      with:
+        runners: required-files,install-dependencies,environment-check,smoke-test-pipeline,required-outputs
