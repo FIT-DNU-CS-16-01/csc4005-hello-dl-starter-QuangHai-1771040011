@@ -64,13 +64,25 @@ Sinh viên nộp lại toàn bộ project sau khi đã chạy xong, bao gồm:
 - config
 - toàn bộ thư mục outputs
 - ảnh chụp màn hình terminal hoặc output thành công
+Screenshot (4).png
 
-## Sinh viên cần cập nhật README này
-- Họ tên:
-- MSSV:
-- Lớp:
-- Hệ điều hành:
-- Python version:
-- Torch version:
-- Thiết bị chạy: CPU / GPU
-- Ghi chú lỗi gặp phải khi setup (nếu có):
+## Thông tin nộp bài
+- Họ tên: Bế Quang Hải
+- MSSV: 1771040011
+- Lớp: KHMT 17-01
+
+## Thông tin máy và môi trường chạy
+- Hệ điều hành: Windows 10
+- Python version: 3.10.20
+- Torch version: 2.11.0+cpu
+- Thiết bị chạy: CPU
+
+## Kết quả chạy kiểm tra
+- `check_env.py`: SUCCESS
+- `run_smoke_test.py`: SUCCESS
+- Epoch 1/3: train_loss=0.8189, test_loss=0.6842, test_acc=0.5200
+- Epoch 2/3: train_loss=0.6936, test_loss=0.6102, test_acc=0.6500
+- Epoch 3/3: train_loss=0.6078, test_loss=0.5564, test_acc=0.7400
+
+## Ghi chú
+- Ghi chú lỗi gặp phải khi setup: Không có
